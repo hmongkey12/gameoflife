@@ -5,7 +5,7 @@ const gameBoard = Array(rows)
   .map((i) => {
     return Array(columns).fill("khaki");
   });
-let intervalID;
+let intervalId = null;
 
 for (let i = 0; i < rows; i++) {
   const wrapper = document.createElement("div");
@@ -36,10 +36,23 @@ for (let i = 0; i < rows; i++) {
 
 const test = document.getElementsByTagName("div");
 document.getElementById("startButton").addEventListener("click", () => {
-  intervalId = window.setInterval(simulate, 1000);
+  intervalId = window.setInterval(simulate, 500);
+});
+document.getElementById("randomButton").addEventListener("click", () => {
+  for (let i = 0; i < gameBoard.length; i++) {
+    for (let j = 0; j < gameBoard[0].length; j++) {
+      if (Math.random() < 0.1) {
+        gameBoard[i][j] = "lightsalmon";
+        test.namedItem(`${i},${j}`).style.background = "lightsalmon";
+      }
+    }
+  }
 });
 document.getElementById("clearButton").addEventListener("click", () => {
-  window.clearInterval(intervalId);
+  if (intervalId) {
+    window.clearInterval(intervalId);
+    intervalId = null;
+  }
   for (let i = 0; i < gameBoard.length; i++) {
     for (let j = 0; j < gameBoard[0].length; j++) {
       gameBoard[i][j] = "khaki";
