@@ -11,7 +11,7 @@ for (let i = 0; i < rows; i++) {
   const wrapper = document.createElement("div");
   wrapper.setAttribute(
     "style",
-    "background-color: lightsalmon; border: 1px solid black; height: 10vh; width: 100%; position: relative; display: flex;"
+    "background-color: lightsalmon; border: 1px solid black; width: 100%; position: relative; display: flex;"
   );
   for (let j = 0; j < columns; j++) {
     const inner = document.createElement("div");
@@ -27,7 +27,7 @@ for (let i = 0; i < rows; i++) {
     };
     inner.setAttribute(
       "style",
-      "background-color: khaki; width: 10%; position: relative; border: 1px solid black;"
+      "background-color: khaki; width: 100%; height: 5vh; position: relative; border: 1px solid black;"
     );
     wrapper.appendChild(inner);
   }
@@ -61,7 +61,22 @@ document.getElementById("clearButton").addEventListener("click", () => {
   }
 });
 
+function updateGameboard(nextGen) {
+  for (let k = 0; k < gameBoard.length; k++) {
+    for (let l = 0; l < gameBoard[0].length; l++) {
+      if (nextGen[k][l] !== "") {
+        gameBoard[k][l] = nextGen[k][l];
+      }
+    }
+  }
+}
+
 function simulate() {
+  let nextGen = Array(rows)
+    .fill([])
+    .map((i) => {
+      return Array(columns).fill("");
+    });
   for (let k = 0; k < gameBoard.length; k++) {
     for (let l = 0; l < gameBoard[0].length; l++) {
       let neighbors = 0;
@@ -123,7 +138,8 @@ function simulate() {
           neighbors += 1;
         }
         if (neighbors === 3) {
-          gameBoard[k][l] = "lightsalmon";
+          nextGen[k][l] = "lightsalmon";
+          // gameBoard[k][l] = "lightsalmon";
         }
       } else if (
         gameBoard[k - 1] !== undefined &&
@@ -185,11 +201,14 @@ function simulate() {
           neighbors += 1;
         }
         if (neighbors <= 1 || neighbors >= 4) {
-          gameBoard[k][l] = "khaki";
+          nextGen[k][l] = "khaki";
+          // gameBoard[k][l] = "khaki";
         }
       }
     }
   }
+
+  updateGameboard(nextGen);
 
   for (let i = 0; i < gameBoard.length; i++) {
     for (let j = 0; j < gameBoard[0].length; j++) {
