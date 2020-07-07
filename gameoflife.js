@@ -5,7 +5,6 @@ const gameBoard = Array(rows)
   .map((i) => {
     return Array(columns).fill("khaki");
   });
-let intervalId = null;
 
 for (let i = 0; i < rows; i++) {
   const wrapper = document.createElement("div");
@@ -36,7 +35,10 @@ for (let i = 0; i < rows; i++) {
 
 const test = document.getElementsByTagName("div");
 document.getElementById("startButton").addEventListener("click", () => {
-  intervalId = window.setInterval(simulate, 500);
+  if (!sessionStorage.getItem("intervalID")) {
+    const intervalID = window.setInterval(simulate, 100);
+    sessionStorage.setItem("intervalID", JSON.stringify(intervalID));
+  }
 });
 document.getElementById("randomButton").addEventListener("click", () => {
   for (let i = 0; i < gameBoard.length; i++) {
@@ -44,14 +46,18 @@ document.getElementById("randomButton").addEventListener("click", () => {
       if (Math.random() < 0.1) {
         gameBoard[i][j] = "lightsalmon";
         test.namedItem(`${i},${j}`).style.background = "lightsalmon";
+      } else {
+        gameBoard[i][j] = "khaki";
+        test.namedItem(`${i},${j}`).style.background = "khaki";
       }
     }
   }
 });
 document.getElementById("clearButton").addEventListener("click", () => {
-  if (intervalId) {
-    window.clearInterval(intervalId);
-    intervalId = null;
+  const intervalID = JSON.parse(sessionStorage.getItem("intervalID"));
+  if (intervalID) {
+    window.clearInterval(intervalID);
+    sessionStorage.removeItem("intervalID");
   }
   for (let i = 0; i < gameBoard.length; i++) {
     for (let j = 0; j < gameBoard[0].length; j++) {
@@ -139,7 +145,6 @@ function simulate() {
         }
         if (neighbors === 3) {
           nextGen[k][l] = "lightsalmon";
-          // gameBoard[k][l] = "lightsalmon";
         }
       } else if (
         gameBoard[k - 1] !== undefined &&
@@ -202,7 +207,6 @@ function simulate() {
         }
         if (neighbors <= 1 || neighbors >= 4) {
           nextGen[k][l] = "khaki";
-          // gameBoard[k][l] = "khaki";
         }
       }
     }
