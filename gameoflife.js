@@ -1,33 +1,35 @@
 const rows = 50;
 const columns = 50;
+const deadHue = Math.floor(Math.random() * 361);
+const deadSat = Math.random() * 100;
+const deadLight = Math.random() * 100;
+const complimentHue = deadHue + 180;
+const liveColor = `hsl(${complimentHue}, ${deadSat}%, ${deadLight}%)`;
+
+const deadColor = `hsl(${deadHue}, ${deadSat}%, ${deadLight}%)`;
 const gameBoard = Array(rows)
   .fill([])
   .map((i) => {
-    return Array(columns).fill("khaki");
+    return Array(columns).fill(deadColor);
   });
 
 for (let i = 0; i < rows; i++) {
   const wrapper = document.createElement("div");
-  wrapper.setAttribute(
-    "style",
-    "background-color: lightsalmon; border: 1px solid black; width: 100%; position: relative; display: flex;"
-  );
+  wrapper.classList.add("wrapper");
+  wrapper.style.background = deadColor;
   for (let j = 0; j < columns; j++) {
     const inner = document.createElement("div");
     inner.id = `${i},${j}`;
     inner.onclick = () => {
-      if (inner.style.background === "khaki") {
-        inner.style.background = "lightsalmon";
-        gameBoard[i][j] = "lightsalmon";
+      if (inner.style.background === deadColor) {
+        inner.style.background = liveColor;
+        gameBoard[i][j] = liveColor;
       } else {
-        inner.style.background = "khaki";
-        gameBoard[i][j] = "khaki";
+        inner.style.background = deadColor;
+        gameBoard[i][j] = deadColor;
       }
     };
-    inner.setAttribute(
-      "style",
-      "background-color: khaki; width: 100%; height: 5vh; position: relative; border: 1px solid black;"
-    );
+    inner.classList.add("square");
     wrapper.appendChild(inner);
   }
   document.body.appendChild(wrapper);
@@ -44,11 +46,11 @@ document.getElementById("randomButton").addEventListener("click", () => {
   for (let i = 0; i < gameBoard.length; i++) {
     for (let j = 0; j < gameBoard[0].length; j++) {
       if (Math.random() < 0.1) {
-        gameBoard[i][j] = "lightsalmon";
-        test.namedItem(`${i},${j}`).style.background = "lightsalmon";
+        gameBoard[i][j] = liveColor;
+        test.namedItem(`${i},${j}`).style.background = liveColor;
       } else {
-        gameBoard[i][j] = "khaki";
-        test.namedItem(`${i},${j}`).style.background = "khaki";
+        gameBoard[i][j] = deadColor;
+        test.namedItem(`${i},${j}`).style.background = deadColor;
       }
     }
   }
@@ -61,8 +63,8 @@ document.getElementById("clearButton").addEventListener("click", () => {
   }
   for (let i = 0; i < gameBoard.length; i++) {
     for (let j = 0; j < gameBoard[0].length; j++) {
-      gameBoard[i][j] = "khaki";
-      test.namedItem(`${i},${j}`).style.background = "khaki";
+      gameBoard[i][j] = deadColor;
+      test.namedItem(`${i},${j}`).style.background = deadColor;
     }
   }
 });
@@ -86,127 +88,124 @@ function simulate() {
   for (let k = 0; k < gameBoard.length; k++) {
     for (let l = 0; l < gameBoard[0].length; l++) {
       let neighbors = 0;
-      if (gameBoard[k][l] === "khaki") {
+      if (gameBoard[k][l] === deadColor) {
         if (
           gameBoard[k - 1] !== undefined &&
           gameBoard[k - 1][l] !== undefined &&
-          gameBoard[k - 1][l] === "lightsalmon"
+          gameBoard[k - 1][l] === liveColor
         ) {
           neighbors += 1;
         }
         if (
           gameBoard[k - 1] !== undefined &&
           gameBoard[k - 1][l - 1] !== undefined &&
-          gameBoard[k - 1][l - 1] === "lightsalmon"
+          gameBoard[k - 1][l - 1] === liveColor
         ) {
           neighbors += 1;
         }
         if (
           gameBoard[k - 1] !== undefined &&
           gameBoard[k - 1][l + 1] !== undefined &&
-          gameBoard[k - 1][l + 1] === "lightsalmon"
+          gameBoard[k - 1][l + 1] === liveColor
         ) {
           neighbors += 1;
         }
         if (
           gameBoard[k] !== undefined &&
           gameBoard[k][l - 1] !== undefined &&
-          gameBoard[k][l - 1] === "lightsalmon"
+          gameBoard[k][l - 1] === liveColor
         ) {
           neighbors += 1;
         }
         if (
           gameBoard[k] !== undefined &&
           gameBoard[k][l + 1] !== undefined &&
-          gameBoard[k][l + 1] === "lightsalmon"
+          gameBoard[k][l + 1] === liveColor
         ) {
           neighbors += 1;
         }
         if (
           gameBoard[k + 1] !== undefined &&
           gameBoard[k + 1][l] !== undefined &&
-          gameBoard[k + 1][l] === "lightsalmon"
+          gameBoard[k + 1][l] === liveColor
         ) {
           neighbors += 1;
         }
         if (
           gameBoard[k + 1] !== undefined &&
           gameBoard[k + 1][l - 1] !== undefined &&
-          gameBoard[k + 1][l - 1] === "lightsalmon"
+          gameBoard[k + 1][l - 1] === liveColor
         ) {
           neighbors += 1;
         }
         if (
           gameBoard[k + 1] !== undefined &&
           gameBoard[k + 1][l + 1] !== undefined &&
-          gameBoard[k + 1][l + 1] === "lightsalmon"
+          gameBoard[k + 1][l + 1] === liveColor
         ) {
           neighbors += 1;
         }
         if (neighbors === 3) {
-          nextGen[k][l] = "lightsalmon";
+          nextGen[k][l] = liveColor;
         }
-      } else if (
-        gameBoard[k - 1] !== undefined &&
-        gameBoard[k][l] === "lightsalmon"
-      ) {
+      } else if (gameBoard[k - 1] !== undefined) {
         if (
           gameBoard[k - 1][l] !== undefined &&
-          gameBoard[k - 1][l] === "lightsalmon"
+          gameBoard[k - 1][l] === liveColor
         ) {
           neighbors += 1;
         }
         if (
           gameBoard[k - 1] !== undefined &&
           gameBoard[k - 1][l - 1] !== undefined &&
-          gameBoard[k - 1][l - 1] === "lightsalmon"
+          gameBoard[k - 1][l - 1] === liveColor
         ) {
           neighbors += 1;
         }
         if (
           gameBoard[k - 1] !== undefined &&
           gameBoard[k - 1][l + 1] !== undefined &&
-          gameBoard[k - 1][l + 1] === "lightsalmon"
+          gameBoard[k - 1][l + 1] === liveColor
         ) {
           neighbors += 1;
         }
         if (
           gameBoard[k] !== undefined &&
           gameBoard[k][l - 1] !== undefined &&
-          gameBoard[k][l - 1] === "lightsalmon"
+          gameBoard[k][l - 1] === liveColor
         ) {
           neighbors += 1;
         }
         if (
           gameBoard[k] !== undefined &&
           gameBoard[k][l + 1] !== undefined &&
-          gameBoard[k][l + 1] === "lightsalmon"
+          gameBoard[k][l + 1] === liveColor
         ) {
           neighbors += 1;
         }
         if (
           gameBoard[k + 1] !== undefined &&
           gameBoard[k + 1][l] !== undefined &&
-          gameBoard[k + 1][l] === "lightsalmon"
+          gameBoard[k + 1][l] === liveColor
         ) {
           neighbors += 1;
         }
         if (
           gameBoard[k + 1] !== undefined &&
           gameBoard[k + 1][l - 1] !== undefined &&
-          gameBoard[k + 1][l - 1] === "lightsalmon"
+          gameBoard[k + 1][l - 1] === liveColor
         ) {
           neighbors += 1;
         }
         if (
           gameBoard[k + 1] !== undefined &&
           gameBoard[k + 1][l + 1] !== undefined &&
-          gameBoard[k + 1][l + 1] === "lightsalmon"
+          gameBoard[k + 1][l + 1] === liveColor
         ) {
           neighbors += 1;
         }
         if (neighbors <= 1 || neighbors >= 4) {
-          nextGen[k][l] = "khaki";
+          nextGen[k][l] = deadColor;
         }
       }
     }
@@ -216,10 +215,10 @@ function simulate() {
 
   for (let i = 0; i < gameBoard.length; i++) {
     for (let j = 0; j < gameBoard[0].length; j++) {
-      if (gameBoard[i][j] === "lightsalmon") {
-        test.namedItem(`${i},${j}`).style.background = "lightsalmon";
+      if (gameBoard[i][j] === liveColor) {
+        test.namedItem(`${i},${j}`).style.background = liveColor;
       } else {
-        test.namedItem(`${i},${j}`).style.background = "khaki";
+        test.namedItem(`${i},${j}`).style.background = deadColor;
       }
     }
   }
