@@ -1,12 +1,9 @@
 const rows = 50;
 const columns = 50;
-const deadHue = Math.floor(Math.random() * 361);
-const deadSat = Math.random() * 100;
-const deadLight = Math.random() * 100;
-const complimentHue = deadHue + 180;
-const liveColor = `hsl(${complimentHue}, ${deadSat}%, ${deadLight}%)`;
-
-const deadColor = `hsl(${deadHue}, ${deadSat}%, ${deadLight}%)`;
+let deadHue = Math.floor(Math.random() * 361);
+let complimentHue = deadHue + 180;
+let liveColor = `hsl(${complimentHue}, 50%, 50%)`;
+let deadColor = `hsl(${deadHue}, 50%, 50%)`;
 const gameBoard = Array(rows)
   .fill([])
   .map((i) => {
@@ -16,7 +13,6 @@ const gameBoard = Array(rows)
 for (let i = 0; i < rows; i++) {
   const wrapper = document.createElement("div");
   wrapper.classList.add("wrapper");
-  wrapper.style.background = deadColor;
   for (let j = 0; j < columns; j++) {
     const inner = document.createElement("div");
     inner.id = `${i},${j}`;
@@ -43,6 +39,10 @@ document.getElementById("startButton").addEventListener("click", () => {
   }
 });
 document.getElementById("randomButton").addEventListener("click", () => {
+  deadHue = Math.floor(Math.random() * 361);
+  complimentHue = deadHue + 180;
+  liveColor = `hsl(${complimentHue}, 50%, 50%)`;
+  deadColor = `hsl(${deadHue}, 50%, 50%)`;
   for (let i = 0; i < gameBoard.length; i++) {
     for (let j = 0; j < gameBoard[0].length; j++) {
       if (Math.random() < 0.1) {
