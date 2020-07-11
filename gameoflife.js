@@ -4,6 +4,7 @@ let deadHue = Math.floor(Math.random() * 361);
 let complimentHue = deadHue + 180;
 let liveColor = `hsl(${complimentHue}, 50%, 50%)`;
 let deadColor = `hsl(${deadHue}, 50%, 50%)`;
+
 const gameBoard = Array(rows)
   .fill([])
   .map((i) => {
@@ -17,7 +18,7 @@ for (let i = 0; i < rows; i++) {
     const inner = document.createElement("div");
     inner.id = `${i},${j}`;
     inner.onclick = () => {
-      if (inner.style.background === deadColor) {
+      if (gameBoard[i][j] === deadColor) {
         inner.style.background = liveColor;
         gameBoard[i][j] = liveColor;
       } else {
