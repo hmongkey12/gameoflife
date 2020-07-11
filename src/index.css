@@ -6,7 +6,16 @@
 }
 
 .square {
-  width: calc(100vw / 50);
   position: relative;
+  width: calc(100vw / 50);
+  height: calc(100vh / 50);
+  border: 1px solid black;
+}
+
+.circle {
+  position: relative;
+  width: calc(100vw / 50);
+  height: calc(100vh / 50);
+  border-radius: 60px;
   border: 1px solid black;
 }

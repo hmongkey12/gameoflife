@@ -4,6 +4,7 @@ let deadHue = Math.floor(Math.random() * 361);
 let complimentHue = deadHue + 180;
 let liveColor = `hsl(${complimentHue}, 50%, 50%)`;
 let deadColor = `hsl(${deadHue}, 50%, 50%)`;
+const shapes = ["square", "circle"];
 
 const gameBoard = Array(rows)
   .fill([])
@@ -26,7 +27,7 @@ for (let i = 0; i < rows; i++) {
         gameBoard[i][j] = deadColor;
       }
     };
-    inner.classList.add("square");
+    inner.classList.add(shapes[0]);
     wrapper.appendChild(inner);
   }
   document.body.appendChild(wrapper);
@@ -40,6 +41,7 @@ document.getElementById("startButton").addEventListener("click", () => {
   }
 });
 document.getElementById("randomButton").addEventListener("click", () => {
+  const shape = shapes[Math.floor(Math.random() * shapes.length)];
   deadHue = Math.floor(Math.random() * 361);
   complimentHue = deadHue + 180;
   liveColor = `hsl(${complimentHue}, 50%, 50%)`;
@@ -53,9 +55,14 @@ document.getElementById("randomButton").addEventListener("click", () => {
         gameBoard[i][j] = deadColor;
         test.namedItem(`${i},${j}`).style.background = deadColor;
       }
+      test
+        .namedItem(`${i},${j}`)
+        .classList.remove(...test.namedItem(`${i},${j}`).classList);
+      test.namedItem(`${i},${j}`).classList.add(shape);
     }
   }
 });
+
 document.getElementById("clearButton").addEventListener("click", () => {
   const intervalID = JSON.parse(sessionStorage.getItem("intervalID"));
   if (intervalID) {
