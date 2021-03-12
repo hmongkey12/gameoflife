@@ -2,12 +2,12 @@
 
 An implementation of Conway's game of life using javascript, html, and css.
 
-![](game1.gif)
+![](./game1.gif)
 
-![](game2.gif)
+![](./game2.gif)
 
-![](game3.gif)
+![](./game3.gif)
 
-![](game4.gif)
+![](./game4.gif)
 
-![](game5.gif)
+![](./game5.gif)
